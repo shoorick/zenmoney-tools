@@ -27,7 +27,18 @@ if __name__ == '__main__':
     if args.source:
         for f in args.source:
             try:
-                data.extend(read_file(f))
+                data = pd.read_csv(
+                    f,
+                    header=1, decimal=',',
+                    parse_dates=['date', 'createdDate', 'changedDate'])
+
+                # Positive income without outcome
+                income = data.loc[(data.income > 0) & (data.outcome.isnull())]
+                income_sum = pd.pivot_table(income, index='date', values='income', aggfunc='sum')
+                print(income_sum)
+                income_sum.plot.barh()
+                plt.show()
+
             except IOError as e:
                 sys.stderr.write('Cannot open file: %s\n' % str(e))
     else:
