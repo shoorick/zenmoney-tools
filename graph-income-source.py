@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
                 # Positive income without outcome
                 income = data.loc[(data.income > 0) & (data.outcome.isnull())]
-                income_sum = pd.pivot_table(income, index='date', values='income', aggfunc='sum')
+                income_sum = income.resample('M', on='date')['income'].sum()
                 print(income_sum)
                 income_sum.plot.barh()
                 plt.show()
