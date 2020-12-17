@@ -10,8 +10,13 @@ Parse arguments
 """
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Draw graphs of income')
-    parser.add_argument('-g', '--group',
-                        help='grouping unit, possible values: day, week, month (default), year')
+    parser.add_argument(
+        '-t', '--time',
+        help='grouping unit, possible values: D, W, M (default), Q, Y '
+            +'for day, week, month, quarter, and year respectively\n'
+            +'See full list at '
+            +'https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases',
+        default='M')
     parser.add_argument('-p', '--payee',
                         help='draw stacked charts for payees')
     parser.add_argument('source', nargs='+', type=argparse.FileType('r'))
@@ -34,7 +39,7 @@ if __name__ == '__main__':
 
                 # Positive income without outcome
                 income = data.loc[(data.income > 0) & (data.outcome.isnull())]
-                income_sum = income.resample('M', on='date')['income'].sum()
+                income_sum = income.resample(args.time, on='date')['income'].sum()
                 print(income_sum)
                 income_sum.plot.bar()
                 plt.show()
