@@ -1,0 +1,42 @@
+digraph G {
+    graph [ rankdir=LR ]
+    node [ shape=box, style=filled, fillcolor=white, fontname="PT Sans", fontsize=16 ]
+
+    zm [ shape=circle, fillcolor=chartreuse, fontsize=24 ]
+    file [ shape=note, fillcolor=wheat ]
+
+    subgraph commands {
+        rank=same
+        node [ fillcolor="#CCE8FF" ]
+
+        auth export import
+        tx [ label="tx\ntransaction" ]
+    }
+
+    subgraph subcommands {
+        rank=same
+        node [ fillcolor="#ebf5ff", color="#446688", fontcolor="#446688" ]
+
+        delete get list
+        exit [ label="exit\nforget\nlogout" ]
+    }
+
+    subgraph arguments {
+        rank=same
+        node [ fillcolor="#ffe6eb", color="#8F5F69", fontcolor="#8F5F69" ]
+        "--add-dupes" "--ask" "--skip-dupes" "--input" "--output"
+        "--type" "--format"
+        "--filter" "--limit" "--skip" "--order"
+    }
+
+    subgraph positional {
+        "id" [ style="filled,rounded", fillcolor="yellow" ]
+    }
+
+    zm -> import -> { "--add-dupes" "--ask" "--skip-dupes" "--input" "--type" "--filter" }
+    { "--input" "--output" } -> file
+    zm -> export -> { "--output" "--type" "--filter" }
+    zm -> auth -> exit
+    zm -> tx -> { get delete } -> "id"
+          tx -> list -> { "--filter" "--limit" "--skip" "--order" "--format" }
+}
