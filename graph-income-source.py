@@ -36,7 +36,7 @@ if __name__ == '__main__':
                 income = data.loc[(data.income > 0) & (data.outcome.isnull())]
                 income_sum = income.resample('M', on='date')['income'].sum()
                 print(income_sum)
-                income_sum.plot.barh()
+                income_sum.plot.bar()
                 plt.show()
 
             except IOError as e:
