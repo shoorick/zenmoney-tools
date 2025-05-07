@@ -14,7 +14,7 @@
 - На панели инструментов, где находятся кнопки записи и очистки, в правой части есть кнопка загрузки (стрелка вниз) — нажать её и в открывшемся меню выбрать **Export as HAR (with sensitive data)...**, сохранить файл
 - Если пункта **Export as HAR (with sensitive data)...** нет — исправить настройки отладчика: кнопка с шестерёнкой (Settings) → Preferences → в блоке Network отметить **Allow to generate HAR with sensitive data** — см. [документацию — Save all network requests to a HAR file](https://developer.chrome.com/docs/devtools/network/reference#save-as-har)
 
-## 2. Преобразование данных
+## 2. Преобразование данных — извлечениене из HAR в JSON
 
 ```sh
 ./extract-transactions-from-har.sh < 00.har > 03-merged.json
@@ -60,4 +60,12 @@ jq '[.[] | .data.transactionPagingList.itemList[]]' 02-tx.json > 03-merged.json
   },
   ...
 ]
+```
+
+## 3. Дополнительное преобразование в CSV
+
+Для обработки средствами `zenmoney-tools` будет достаточно JSON, однако для сторонних приложений
+(Microsoft Excel, OpenOffice/LibreOffice Calc, Google Sheets) может понадобиться формат CSV (Comma separated values)
+```sh
+./json2csv.py < source.json > destination.csv
 ```
